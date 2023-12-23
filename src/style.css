@@ -1,0 +1,21 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+body {
+	height: 100vh;
+}
+li {
+	list-style: none;
+	overflow-x: auto;
+}
+.view {
+	min-height: 10rem;
+	max-height: 15rem;
+	overflow-y: auto;
+}
+.box {
+	width: 100%;
+	max-width: 40rem;
+}
