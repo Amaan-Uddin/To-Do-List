@@ -19,3 +19,15 @@ li {
 	width: 100%;
 	max-width: 40rem;
 }
+
+.task {
+	text-transform: capitalize;
+	padding: 0.5rem 1rem;
+	margin-bottom: 0.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	border: 1px solid #dee2e6;
+	border-radius: 5px;
+}
