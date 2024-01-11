@@ -1,10 +1,11 @@
+const input = document.getElementById('task');
+const myForm = document.getElementById('myForm');
 const taskSection = document.getElementById('task-section');
 
-document.getElementById('myForm').addEventListener('submit', (e) => {
+myForm.addEventListener('submit', (e) => {
 	e.preventDefault();
-	const input = document.getElementById('task');
-	if (input.value !== '') {
-		createTask(input.value);
+	if (input.value != '') {
+		createTask(input.value, true);
 		input.value = '';
 		input.focus();
 	}
@@ -12,17 +13,16 @@ document.getElementById('myForm').addEventListener('submit', (e) => {
 
 document.addEventListener('DOMContentLoaded', () => {
 	if (localStorage.length) {
-		const localKeys = Object.keys(localStorage); // returns an array of keys of the object
+		const localKeys = Object.keys(localStorage).sort();
 		localKeys.forEach((task) => {
-			createTask(localStorage.getItem(task));
+			createTask(localStorage.getItem(task), false);
 		});
 	}
 });
 
-// here we are using the concept of event delegation to add listners to children of a ul
 taskSection.addEventListener('click', (e) => {
-	const buttons = e.target.parentNode; // parent
-	const li = buttons.parentNode; // grand-parent
+	const buttons = e.target.parentNode;
+	const li = buttons.parentNode;
 
 	if (e.target.classList.contains('done')) {
 		localStorage.removeItem(`task${li.dataset.taskNumber}`);
@@ -39,42 +39,36 @@ taskSection.addEventListener('click', (e) => {
 	}
 });
 
-function createTask(task) {
+function createTask(data, newtask) {
 	const li = document.createElement('li');
 	li.classList.add('task');
 
 	const doneBtn = document.createElement('button');
 	const deleteBtn = document.createElement('button');
 
+	doneBtn.classList.add('btn', 'btn-success', 'done');
+	deleteBtn.classList.add('btn', 'btn-danger', 'delete');
+
 	doneBtn.textContent = 'done';
 	deleteBtn.textContent = 'delete';
-
-	const btnArray = Array(doneBtn, deleteBtn);
-
-	btnArray.forEach((btn) => {
-		btn.classList.add('btn');
-		if (btn.textContent === 'done') {
-			btn.classList.add('btn-success', 'done');
-		} else {
-			btn.classList.add('btn-danger', 'delete');
-		}
-	});
-
-	const span = document.createElement('span');
-	span.textContent = task;
 
 	const buttons = document.createElement('div');
 	buttons.classList.add('d-flex', 'gap-2');
 
-	buttons.appendChild(doneBtn);
-	buttons.appendChild(deleteBtn);
+	const span = document.createElement('span');
+	span.textContent = data;
 
-	li.appendChild(span);
-	li.append(buttons);
+	buttons.append(doneBtn, deleteBtn);
 
-	const taskNumber = taskSection.childElementCount + 1;
-	localStorage.setItem(`task${taskNumber}`, task);
+	li.append(span, buttons);
 
-	li.dataset.taskNumber = taskNumber; // create a dataset attribute to store the task number
+	const taskNumber = taskSection.childElementCount;
+
+	if (newtask) {
+		localStorage.setItem(`task${taskNumber}`, data);
+	}
+
+	li.dataset.taskNumber = taskNumber;
+
 	taskSection.appendChild(li);
 }
